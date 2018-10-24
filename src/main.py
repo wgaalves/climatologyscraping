@@ -11,22 +11,23 @@ result = []
 for i in range(1, 100):
 
     RETRIES = 3
-
-    options = webdriver.FirefoxOptions()
-    options.add_argument("--headless")
-    driver = webdriver.Firefox(firefox_options=options)
-
     url = 'https://www.climatempo.com.br/climatologia/{}/city'.format(i)
     print(url)
 
-    driver.set_page_load_timeout(20)
     for j in range(1, RETRIES):
+        options = webdriver.FirefoxOptions()
+        options.add_argument("--headless")
+        driver = webdriver.Firefox(firefox_options=options)
+        driver.set_page_load_timeout(20)
+
         try:
+
             driver.get(url)
             time.sleep(10)
 
         except TimeoutException:
             print("Timeout, Retrying... (%(i)s/%(max)s)" % {'i': j, 'max': RETRIES})
+            driver.quit()
             continue
 
         else:
